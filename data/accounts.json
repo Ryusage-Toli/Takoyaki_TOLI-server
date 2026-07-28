@@ -1,0 +1,76 @@
+{
+  "accounts": [
+    {
+      "id": "eab82627-a148-4129-85ab-aecdddb5c722",
+      "username": "Ryusage",
+      "hash": "14b9b0ea48e55cd33e13a0037508dc20eeb905592d55c867e0eae4a9a7b2d8f303a9f759d93bf3cb86de20f94f3b190f8652b44b106f58948b9a03c1e4d63b65",
+      "salt": "696f04259289c199a4b4617e55a8e228",
+      "role": "admin",
+      "createdAt": 1785221135931,
+      "lastSeenAt": 1785222059428,
+      "lobby": {
+        "colors": {
+          "accent": "#000000",
+          "iconText": "#181b22",
+          "iconBg": "#e0e3e5",
+          "titleText": "#181b22",
+          "titleBg": "#eef0f6",
+          "bodyBg": "#ffffff",
+          "bodyText": "#000000",
+          "mutedText": "#454545",
+          "cardBg": "#ffffff",
+          "line": "#212121",
+          "taskbarBg": "#141824",
+          "taskbarText": "#ffffff"
+        },
+        "wallpaper": {
+          "kind": "solid",
+          "color": "#eef0f6",
+          "fit": "cover"
+        },
+        "memoText": "",
+        "gallery": [],
+        "music": [],
+        "ddays": [],
+        "calEvents": {},
+        "iconImages": {},
+        "iconPos": {
+          "sessionlog": {
+            "x": 108,
+            "y": 102
+          },
+          "settings": {
+            "x": 16,
+            "y": 522
+          },
+          "dday": {
+            "x": 108,
+            "y": 270
+          },
+          "music": {
+            "x": 108,
+            "y": 354
+          },
+          "playtime": {
+            "x": 108,
+            "y": 18
+          },
+          "guestbook": {
+            "x": 108,
+            "y": 186
+          },
+          "dm": {
+            "x": 108,
+            "y": 438
+          }
+        },
+        "iconEmojis": {},
+        "iconLabels": {},
+        "iconSizes": {},
+        "hiddenIcons": {},
+        "stickers": [],
+        "updatedAt": 1785222025099
+      }
+    }
+  ]
+}
