@@ -55,8 +55,8 @@ const sessionTtlMs = process.env.SESSION_TTL_DAYS
 const webRootCandidate = process.env.WEB_ROOT ? resolve(process.env.WEB_ROOT) : resolve('webdist')
 const webRoot = existsSync(join(webRootCandidate, 'index.html')) ? webRootCandidate : null
 
-// 운영: 계정·캐릭터·세션방 영속(<cwd>/data) + 로그인 필수. 누구나 방을 만들 수 있고 생성자가 그 방의 GM(소유자)이 된다.
-//   (자가호스팅 배포라 중앙 관리자가 없으므로 전역 admin 역할은 권한에 쓰지 않는다. role 필드는 호환용으로만 둔다.)
+// 운영: 계정·캐릭터·세션방 영속(<cwd>/data) + 로그인 필수. 멤버·관리자가 방을 만들 수 있고 생성자가 그 방의 GM(소유자)이 된다.
+//   (전역 등급 admin/member/guest 는 호스팅 용량 보호용 축이다 — 손님은 승인 전까지 방을 만들 수 없고, 관리 화면은 관리자만 연다.)
 // 세션방은 영속(소유자 삭제 전까지 유지) — 유휴 정리(sweep) 없음.
 const authStore = createAuthStore({ sessionTtlMs })
 const charStore = createCharacterStore()
@@ -154,16 +154,19 @@ function runAssetGc(): void {
     sessionLogStore.collectAssetRefs(live)
     dottownStore.collectAssetRefs(live)
     economyStore.collectAssetRefs(live)
-    marketStore.collectAssetRefs(live)
+    marketStore.collectAssetRefs(live) // ⚠마켓 이미지(등록·보유) — 주기 GC 회수 방지
     communityStore.collectAssetRefs(live)
     communityPostStore.collectAssetRefs(live)
-    communityCharStore.collectAssetRefs(live) // ⚠커뮤니티 이미지 — 안 실으면 최대 6시간 뒤 사라진다 // ⚠UGC 마켓 이미지(등록/보유) — 주기 GC 회수 방지
+    communityCharStore.collectAssetRefs(live) // ⚠커뮤니티 이미지 — 안 실으면 최대 6시간 뒤 사라진다
     communityCatalog.collectAssetRefs(live) // ⚠아이템 그림·상점 배너
     communityGifts.collectAssetRefs(live) // ⚠보내는 중인 선물의 편지 그림
     communityGames.collectAssetRefs(live) // ⚠퀘스트 배너·완료 카드·장면 그림
-    const { removed, freed } = assetStore.sweep(live)
-    if (removed) {
-      console.log(`[assets] 고아 자산 ${removed}개 정리 · ${(freed / 1024 / 1024).toFixed(1)}MB 확보 (참조 ${live.size}개 보존)`)
+    const { removed, freed, deferred, failed } = assetStore.sweep(live)
+    if (removed || failed) {
+      console.log(
+        `[assets] 고아 자산 ${removed}개 정리 · ${(freed / 1024 / 1024).toFixed(1)}MB 확보 ` +
+          `(참조 ${live.size}개 보존 · 유예 ${deferred}개 · 실패 ${failed}개)`
+      )
     }
   } catch (e) {
     console.error('[assets] 자산 GC 실패:', e)
